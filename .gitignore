@@ -43,3 +43,4 @@ node_modules/
 
 # Test reports
 /test-reports
+public/uploads

@@ -1,11 +1,15 @@
-import { type users } from '@prisma/client';
+import { type Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import LogMessage from '@/decorators/log-message.decorator';
 
-export default class UserService {
-  @LogMessage<[users]>({ message: 'test-decorator' })
-  public async createUser(data: users) {
-    const user = await prisma.users.create({ data });
+class UserService {
+  @LogMessage<[Prisma.UserCreateInput]>({ message: 'test-decorator' })
+  public async createUser(data: Prisma.UserCreateInput) {
+    const user = await prisma.user.create({ data });
     return user;
   }
 }
+
+const userService = new UserService();
+
+export default userService;

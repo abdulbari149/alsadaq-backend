@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import expressJSDocSwagger from 'express-jsdoc-swagger';
 import home from './home';
-import environment from './lib/environment';
 import expressJSDocSwaggerConfig from './config/express-jsdoc-swagger.config';
 import appConfig from './config/app.config';
 import errorHandler from '@/middlewares/error-handler';
@@ -42,9 +41,8 @@ class App {
     const {
       api: { version },
     } = appConfig;
-    const { env } = environment;
     this.express.use('/', home);
-    this.express.use(`/api/${version}/${env}`, routes);
+    this.express.use(`/api/${version}`, routes);
   }
 
   private setErrorHandler(): void {

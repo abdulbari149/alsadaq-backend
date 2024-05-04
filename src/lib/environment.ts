@@ -7,6 +7,7 @@ import envValidationConfig from '@/config/env-validation.config';
 import { envFileNotFoundError } from '@/utils/helper';
 import { type CommonEnvKeys } from '@/types/environment.type';
 import appConfig from '@/config/app.config';
+import { type TokenType } from '@/enums/types.enum';
 
 export interface IEnvironment {
   getCurrentEnvironment: () => string;
@@ -17,10 +18,26 @@ export interface IEnvironment {
   isStage: () => boolean;
 }
 
+type JwtEnvirnoment = {
+  [key in TokenType]: {
+    secret: string;
+    expiration: string;
+  };
+};
+
 class Environment implements IEnvironment {
   private _port: number;
   private _env: Environments;
   private _appUrl: string;
+  private _jwt: JwtEnvirnoment;
+
+  private _mail: {
+    host: string;
+    port: number;
+    user: string;
+    password: string;
+    from: string;
+  };
 
   constructor() {
     this.port = +process.env.PORT ?? appConfig.defaultPort;
@@ -51,6 +68,22 @@ class Environment implements IEnvironment {
     this._appUrl = value;
   }
 
+  get jwt() {
+    return this._jwt;
+  }
+
+  set jwt(value) {
+    this._jwt = value;
+  }
+
+  get mail() {
+    return this._mail;
+  }
+
+  set mail(value) {
+    this._mail = value;
+  }
+
   private resolveEnvPath(key: CommonEnvKeys): string {
     // On priority bar, .env.[NODE_ENV] has higher priority than default env file (.env)
     // If both are not resolved, error is thrown.
@@ -67,6 +100,24 @@ class Environment implements IEnvironment {
     const env = cleanEnv(process.env, envValidationConfig);
     this.port = env.PORT;
     this.appUrl = env.APP_BASE_URL;
+    this.jwt = {
+      access: {
+        secret: env.JWT_ACCESS_SECRET,
+        expiration: env.JWT_ACCESS_EXPIRATION,
+      },
+      refresh: {
+        secret: env.JWT_REFRESH_SECRET,
+        expiration: env.JWT_REFRESH_EXPIRATION,
+      },
+    };
+
+    this.mail = {
+      host: env.EMAIL_HOST,
+      port: env.EMAIL_PORT,
+      user: env.EMAIL_USER,
+      password: env.EMAIL_PASSWORD,
+      from: env.EMAIL_FROM,
+    };
   }
 
   public setEnvironment(env = Environments.DEV): void {

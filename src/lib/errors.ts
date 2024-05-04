@@ -41,3 +41,63 @@ export class HttpNotFoundError extends ApiError {
     super(HttpStatusCode.NotFound, message, errors);
   }
 }
+
+export class HttpForbiddenError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.Forbidden, message);
+  }
+}
+
+export class HttpConflictError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.Conflict, message);
+  }
+}
+
+export class HttpUnprocessableEntityError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.UnprocessableEntity, message);
+  }
+}
+
+export class HttpTooManyRequestsError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.TooManyRequests, message);
+  }
+}
+
+export class HttpBadGatewayError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.BadGateway, message);
+  }
+}
+
+export class HttpServiceUnavailableError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.ServiceUnavailable, message);
+  }
+}
+
+export class HttpGatewayTimeoutError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.GatewayTimeout, message);
+  }
+}
+
+export class HttpNotImplementedError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.NotImplemented, message);
+  }
+}
+
+export class HttpNotAcceptableError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.NotAcceptable, message);
+  }
+}
+
+export class HttpRequestTimeoutError extends ApiError {
+  constructor(message: string) {
+    super(HttpStatusCode.RequestTimeout, message);
+  }
+}

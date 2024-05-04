@@ -1,3 +1,4 @@
+import { type User } from '@prisma/client';
 import { type Response } from 'express';
 
 type Send<ResBody = any, T = Response<ResBody>> = (body?: {
@@ -7,4 +8,27 @@ type Send<ResBody = any, T = Response<ResBody>> = (body?: {
 
 export interface CustomResponse<T> extends Response {
   json: Send<T, this>;
+}
+
+export interface JwtPayload {
+  id: string;
+  email: string;
+  role: string;
+}
+
+export interface ApiLocals {
+  payload: JwtPayload;
+  credentials: string;
+  user: Omit<User, 'password' | 'deletedAt'>;
+}
+
+export interface PaginationParams {
+  page: number;
+  limit: number;
+  skip: number;
+}
+
+export interface SortParams {
+  sort?: string;
+  order?: string;
 }

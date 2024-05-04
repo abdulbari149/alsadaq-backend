@@ -1,30 +1,18 @@
-import { PrismaClient, type users } from '@prisma/client';
-import { faker } from '@faker-js/faker';
+import { PrismaClient } from '@prisma/client';
 import logger from '../src/lib/logger';
-import { HR } from '../src/utils/helper';
+import seeds from './seeds';
 
 const prisma = new PrismaClient();
-const seedUsers = async (): Promise<void> => {
-  const fakeUsers = faker.helpers.uniqueArray<users>(
-    () => ({
-      id: faker.datatype.uuid(),
-      name: faker.name.fullName(),
-      email: faker.internet.email(),
-      phone: faker.phone.number(),
-    }),
-    3
-  );
-  const users = await prisma.users.createMany({ data: fakeUsers });
-  logger.info(`
-    \r${HR('white', '-', 30)}
-    \rSeed completed for model: user
-    \rcount: ${users.count}
-    \r${HR('white', '-', 30)}
-  `);
-};
 
 async function seed(): Promise<void> {
-  await Promise.all([seedUsers()]);
+  const promises = seeds.map(async (Seed) => {
+    const instance = new Seed();
+    if (!instance.isExecutable) {
+      return;
+    }
+    await instance.seed(prisma);
+  });
+  await Promise.all(promises);
 }
 
 async function main(): Promise<void> {
